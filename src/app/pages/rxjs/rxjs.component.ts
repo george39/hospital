@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, observable, Subscription } from 'rxjs';
+import { Observable, Subscription, Subscriber } from 'rxjs';
 import { retry, map, filter } from 'rxjs/operators';
 
 @Component({
@@ -30,7 +30,7 @@ export class RxjsComponent implements OnInit, OnDestroy {
   }
 
   regresaObservable(): Observable<any> {
-    return new Observable( (observer: Subscribe<any>) => {
+    return new Observable( (observer: Subscriber<any>) => {
       let contador = 0;
 
       const intervalo = setInterval(() => {
