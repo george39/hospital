@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
-
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
@@ -20,7 +20,7 @@ export class BreadcrumbsComponent implements OnInit {
     
     this.getDataRouter()
     .subscribe( data => {
-      console.log(data);
+      
       this.titulo = data.titulo;
       this.title.setTitle(this.titulo);
 
@@ -35,7 +35,7 @@ export class BreadcrumbsComponent implements OnInit {
   ngOnInit() {
   }
 
-  getDataRouter(){
+  getDataRouter(): Observable <any>{
     return this.router.events.pipe(
       filter( evento => evento instanceof ActivationEnd),
       filter((evento: ActivationEnd) => evento.snapshot.firstChild === null),

@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../models/usuario.model';
 import { URL_SERVICIOS } from '../../config/config';
-import { Observable, Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
 
-import { map } from "rxjs/operators";
+//import { map } from "rxjs/operators";
+import { Pipe } from '@angular/core';
 
-import SweetAlert from 'sweetalert';
+
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 import swal from 'sweetalert';
+import { Observable } from 'rxjs';
 
 @Injectable({
  providedIn: 'root'
@@ -72,7 +73,7 @@ export class UsuarioService {
                 });
   }
 
-  login( usuario: Usuario, recordar: boolean = false ){
+  login( usuario: Usuario, recordar: boolean = false ): Observable <any> {
 
     if (recordar) {
       localStorage.setItem('email', usuario.email);
@@ -89,27 +90,31 @@ export class UsuarioService {
                 });
   }
 
-  crearUsuario( usuario: Usuario){
+  crearUsuario( usuario: Usuario): Observable <any> {
     let url = URL_SERVICIOS + '/usuario';
 
     return this.http.post( url, usuario)
               .map((resp: any) => {
-                SweetAlert('Usuario creado', usuario.email, 'success');
+                swal('Usuario creado', usuario.email, 'success');
                 return resp.usuario;
               });
   
   }
 
-  actualizarUsuario(usuario: Usuario) {
+  actualizarUsuario(usuario: Usuario): Observable <any> {
     let url = URL_SERVICIOS + '/usuario/' + usuario._id;
     url += '?token=' + this.token;
   
     return this.http.put(url, usuario)
                 .map((resp: any) => {
-                  let usuarioDB: Usuario = resp.usuario;
 
-                  this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
-                  SweetAlert('Usuario actualizado', usuario.nombre, 'success');
+                  if (usuario._id === this.usuario._id){
+
+                    let usuarioDB: Usuario = resp.usuario;
+                    this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+                  }
+
+                  swal('Usuario actualizado', usuario.nombre, 'success');
 
                   return true;
                 });
@@ -125,5 +130,26 @@ export class UsuarioService {
         .catch(resp => {
           console.log(resp);
         });
+  }
+
+  cargarUsuarios(desde: number = 0) {
+    let url = URL_SERVICIOS + '/usuario?desde=' + desde;
+    return this.http.get(url);
+  }
+
+  buscarUsuarios(termino: string): Observable <any> {
+    let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
+    return this.http.get(url)
+                .map((resp: any) => resp.usuarios);
+  }
+
+  borrarUsuario(id: string): Observable <any> {
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    url += '?token=' + this.token;
+    return this.http.delete(url)
+                .map( resp => {
+                  swal('Usuario borrado', 'El usuario ha sido eliminado correctamente', 'success');
+                  return true;
+                });
   }
 }
