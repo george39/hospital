@@ -61,7 +61,7 @@ export class MedicoService {
 
       return this.http.put(url, medico)
         .map((resp: any) => {
-          swal('Médico actualizado', medico.nombre, 'success');
+          swal('Médico actualizadonopage', medico.nombre, 'success');
           return resp.medico;
         });
     } else {
