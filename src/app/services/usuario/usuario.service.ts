@@ -6,6 +6,8 @@ import { URL_SERVICIOS } from '../../config/config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+
+
 //import { map } from "rxjs/operators";
 import { Pipe } from '@angular/core';
 
@@ -30,6 +32,26 @@ export class UsuarioService {
     public _subirArchivoService: SubirArchivoService
   ) { 
     this.cargarStorage();
+  }
+
+
+  renuevaToken() {
+    let url = URL_SERVICIOS + '/login/renuevatoken';
+    url += '?token' + this.token;
+
+    return this.http.get(url)
+        .map((resp: any) => {
+          this.token = resp.token;
+          localStorage.setItem('token', this.token);
+          console.log('token renovado');
+
+          return true;
+        })
+        .catch(err => {
+          this.router.navigate(['/login']);
+          swal('No se pudo renovar token', 'No fue posible renovar token', 'error');
+          return Observable.throw(err);
+        });
   }
 
   estaLogueado() {
@@ -132,6 +154,10 @@ export class UsuarioService {
                   swal('Usuario actualizado', usuario.nombre, 'success');
 
                   return true;
+                })
+                .catch(err => {
+                  swal(err.error.mensaje, err.error.errors.message, 'error');
+                  return Observable.throw(err);
                 });
   }
 

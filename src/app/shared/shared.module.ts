@@ -7,6 +7,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { NopagesfoundComponent } from './nopagesfound/nopagesfound.component';
 import { RouterModule } from '@angular/router';
 import { PipesModule } from '../pipes/pipes.module';
+import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 
 
 
@@ -22,13 +23,15 @@ import { PipesModule } from '../pipes/pipes.module';
         NopagesfoundComponent,
         HeaderComponent,
         SidebarComponent,
-        BreadcrumbsComponent
+        BreadcrumbsComponent,
+        ModalUploadComponent
     ],
     exports: [
         NopagesfoundComponent,
         HeaderComponent,
         SidebarComponent,
-        BreadcrumbsComponent
+        BreadcrumbsComponent,
+        ModalUploadComponent
     ]
 })
 

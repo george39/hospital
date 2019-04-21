@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert';
+import swal from 'sweetalert';
 import { SubirArchivoService } from 'src/app/services/service.index';
 import { ModalUploadService } from './modal-upload.service';
 
@@ -52,7 +52,7 @@ export class ModalUploadComponent implements OnInit {
     }
 
     if(archivo.type.indexOf('image') < 0) {
-      Swal('Solo imágenes', 'El archivo seleccionado no es una imagen', 'error');
+      swal('Solo imágenes', 'El archivo seleccionado no es una imagen', 'error');
       return;
       this.imagenSubir = null;
     }
